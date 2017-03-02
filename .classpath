@@ -27,6 +27,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/maidl/workspaces/workspace-jadice-webtoolkit/webtoolkit-mainline/util/webtoolkit-util-instrumented/target/webtoolkit-util-instrumented-5.5.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/maidl/workspaces/workspace-jadice-webtoolkit/webtoolkit-mainline/util/instrumented/target/webtoolkit-util-instrumented-5.5.0.0-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
