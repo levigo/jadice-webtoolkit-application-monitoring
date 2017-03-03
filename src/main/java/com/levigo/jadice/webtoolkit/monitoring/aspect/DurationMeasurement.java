@@ -1,4 +1,4 @@
-package com.levigo.jadice.webtoolkit.monitoring.aspects;
+package com.levigo.jadice.webtoolkit.monitoring.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -14,30 +14,24 @@ import com.levigo.jadice.webtoolkit.monitoring.Base;
 public class DurationMeasurement extends Base {
 
   private long startTime = 0;
-  private String metricName = "";
 
   @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedDuration)")
-  protected void measureDuration() {
+  protected void pointcut() {
   }
 
-  @Around("measureDuration()")
-  public Object aroundDuration(ProceedingJoinPoint joinPoint, InstrumentedDuration id) throws Throwable {
-    
-    if (metricName.length() < 1) {
-       metricName =  id.value();
-    }
-    
-    return joinPoint.proceed();
+  @Override
+  @Around("pointcut()")
+  public Object determineMetricName(ProceedingJoinPoint joinPoint, InstrumentedDuration id) throws Throwable {
+    return super.determineMetricName(joinPoint, id);
   }
 
-  @Before("measureDuration()")
+  @Before("pointcut()")
   public void startMeasurement(ProceedingJoinPoint joinPoint) {
-
     startTime = System.currentTimeMillis();
   }
 
-  @After("measureDuration()")
+  @After("pointcut()")
   public void stopMeasurement() {
-    monitorClient.publish(metricName, System.currentTimeMillis() - startTime);
+    super.publish(getClass(), System.currentTimeMillis() - startTime);
   }
 }
