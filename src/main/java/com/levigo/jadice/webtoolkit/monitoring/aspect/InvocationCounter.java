@@ -6,26 +6,29 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import com.jadice.web.util.instrumented.metrics.InstrumentedDuration;
-import com.levigo.jadice.webtoolkit.monitoring.Base;
+import com.jadice.web.util.instrumented.metrics.InstrumentedInvocationCount;
+import com.levigo.jadice.webtoolkit.monitoring.Publisher;
+import com.levigo.jadice.webtoolkit.monitoring.data.CounterData;
 
 @Aspect
-public class InvocationCounter extends Base {
+public class InvocationCounter {
 
-  int counter = 0;
+  private String metricName = "";
+  private String label = "";
+  private long counter = 0;
 
   @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedInvocationCount)")
   protected void pointcut() {
   }
 
-  @Override
   @Around("pointcut()")
-  public Object determineMetricName(ProceedingJoinPoint joinPoint, InstrumentedDuration id) throws Throwable {
-    return super.determineMetricName(joinPoint, id);
+  public Object determineMetricName(ProceedingJoinPoint joinPoint, InstrumentedInvocationCount ic) throws Throwable {
+    metricName = ic.value();
+    return joinPoint.proceed();
   }
 
   @After("pointcut()")
   public void incrementCounter() {
-    super.publish(getClass(), ++counter);
+    Publisher.pushToAdapter(new CounterData(metricName, label, ++counter));
   }
 }
