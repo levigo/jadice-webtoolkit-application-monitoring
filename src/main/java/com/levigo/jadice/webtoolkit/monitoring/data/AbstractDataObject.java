@@ -1,4 +1,6 @@
-package com.levigo.jadice.webtoolkit.monitoring;
+package com.levigo.jadice.webtoolkit.monitoring.data;
+
+import com.levigo.jadice.webtoolkit.monitoring.DataObject;
 
 public abstract class AbstractDataObject<T> implements DataObject<T> {
 

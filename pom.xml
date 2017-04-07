@@ -54,11 +54,7 @@
 			<artifactId>simpleclient_pushgateway</artifactId>
 			<version>${prometheus.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-			<version>9.4.3.v20170317</version>
-		</dependency>
+		<!-- JavaX Servlet-API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
