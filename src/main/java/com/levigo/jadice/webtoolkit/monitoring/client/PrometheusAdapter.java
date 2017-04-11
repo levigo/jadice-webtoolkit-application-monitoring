@@ -7,7 +7,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRegistration;
-import javax.servlet.annotation.WebListener;
 
 import com.levigo.jadice.webtoolkit.monitoring.DataObject;
 import com.levigo.jadice.webtoolkit.monitoring.MonitorClient;
@@ -22,11 +21,9 @@ import io.prometheus.client.Gauge;
 import io.prometheus.client.SimpleCollector;
 import io.prometheus.client.exporter.MetricsServlet;
 
-@WebListener
 public class PrometheusAdapter implements MonitorClient, ServletContextListener {
 
-  final static private String contextPath = "/metrics";
-  //  final static private int port = 9095;
+  private static final String contextPath = "/metrics";
 
   private CollectorRegistry collectorRegistry = CollectorRegistry.defaultRegistry;
   private Map<String, Collector> collectors = new ConcurrentHashMap<>();
@@ -36,16 +33,20 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
 
   @Override
   public void publish(DataObject<?> data) {
+
+    // TODO: Remove!
+    System.out.println("PrometheusAdapter: [metric: " + data.getMetricName() + ", value: " + data.getValue() + "]");
+
     if (data instanceof DurationData) {
       DurationData dd = (DurationData) data;
-      
-      Gauge gauge = getCollector(Gauge.build(), dd.getMetricName());
+
+      Gauge gauge = getCollector(Gauge.build(), dd.getMetricName(), dd.getMetricDescription());
       gauge.set((dd.getValue()));
 
     } else if (data instanceof CounterData) {
       CounterData cd = (CounterData) data;
-      
-      Counter counter = getCollector(Counter.build(), cd.getMetricName());
+
+      Counter counter = getCollector(Counter.build(), cd.getMetricName(), cd.getMetricDescription());
       counter.clear();
       counter.inc(cd.getValue());
 
@@ -53,9 +54,6 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
       // not supported by Prometheus
       // https://prometheus.io/docs/concepts/metric_types/
     }
-
-    // TODO: REMOVE
-    System.out.println("PrometheusAdapter: [metric: " + data.getMetricName() + ", value: " + data.getValue() + "]");
   }
 
   @Override
@@ -72,11 +70,11 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
   }
 
   private <C extends SimpleCollector<?>, B extends SimpleCollector.Builder<B, C>> C getCollector(
-      SimpleCollector.Builder<B, C> builder, String metricName) {
+      SimpleCollector.Builder<B, C> builder, String metricName, String metricDescription) {
     @SuppressWarnings("unchecked")
     C collector = (C) collectors.get(metricName);
     if (null == collector) {
-      collector = builder.name(metricName).help("Dunno").register();
+      collector = builder.name(metricName).help(metricDescription).register();
       collectors.put(metricName, collector);
     }
 

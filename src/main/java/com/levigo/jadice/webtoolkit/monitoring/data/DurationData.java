@@ -1,9 +1,9 @@
 package com.levigo.jadice.webtoolkit.monitoring.data;
 
-public class DurationData extends AbstractDataObject<Double> {
+public class DurationData extends AbstractDataObject<Long> {
 
-  public DurationData(String metricName, String label, Double value) {
-    super(metricName, label, value);
+  public DurationData(String metricName, String metricDescription, String label, long value) {
+    super(metricName, metricDescription, label, value);
   }
 
 }
