@@ -26,15 +26,14 @@ public abstract class BasicAspect {
   public abstract void pointcut();
 
   /**
-   * This method needs to bee called to set metric name, description as well label attribute and
-   * value for this object. The proceeding join point is given by an around
+   * This method needs to bee called to set metric name and metric description as well label
+   * attribute and label value for this object. The proceeding join point is given by an around
    * ({@link org.aspectj.lang.annotation.Around @Around(..)}) advice.
    * 
    * @param joinPoint The {@link ProceedingJoinPoint} of an around advice.
    */
   protected void determineMetricInformation(ProceedingJoinPoint joinPoint, Class<? extends Annotation> clazz) {
-    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-    Method method = signature.getMethod();
+    Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 
     Annotation annotation = method.getAnnotation(clazz);
 
@@ -61,6 +60,10 @@ public abstract class BasicAspect {
     }
   }
 
+  /**
+   * Publishes the given data.
+   * @param data The data object.
+   */
   protected void publish(DataObject<?> data) {
 
     data.setMetricName(this.metricName);

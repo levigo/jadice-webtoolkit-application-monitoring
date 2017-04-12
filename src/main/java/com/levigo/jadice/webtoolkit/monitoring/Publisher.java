@@ -4,23 +4,38 @@ import com.levigo.jadice.webtoolkit.monitoring.client.MonitorClient;
 import com.levigo.jadice.webtoolkit.monitoring.client.PrometheusAdapter;
 import com.levigo.jadice.webtoolkit.monitoring.data.DataObject;
 
+/**
+ * Publisher connects aspects to a respective adaptor (client) that was designed to send or provide
+ * data to/for a specific monitoring system.
+ *
+ */
 final public class Publisher {
-  
-  // TODO: Get this information from a config file?
+
   private static final MonitorClient monitorClient = new PrometheusAdapter();
-  
   private static Publisher instance;
-  
+
+  /**
+   * Returns the one and only instance of Publisher.
+   * 
+   * @return The instance of Publisher.
+   */
   public static Publisher getInstance() {
     if (null == instance) {
       instance = new Publisher();
     }
-    
+
     return instance;
   }
 
-  private Publisher(){};
-  
+  /**
+   * Private constructor to prevent from instantiation.
+   */
+  private Publisher() {
+  };
+
+  /**
+   * Pushes the given data to the publisher.
+   */
   public void pushToAdapter(DataObject<?> data) {
     monitorClient.publish(data);
   }
