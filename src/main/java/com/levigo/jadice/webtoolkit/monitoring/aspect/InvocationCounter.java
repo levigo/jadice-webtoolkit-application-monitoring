@@ -1,39 +1,28 @@
 package com.levigo.jadice.webtoolkit.monitoring.aspect;
 
-import java.lang.reflect.Method;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 
 import com.jadice.web.util.instrumented.metrics.InstrumentedInvocationCount;
-import com.levigo.jadice.webtoolkit.monitoring.Publisher;
 import com.levigo.jadice.webtoolkit.monitoring.data.CounterData;
 
 @Aspect
-public class InvocationCounter {
+public class InvocationCounter extends BasicAspect {
 
-  private String metricName = "";
-  private String metricDescription = "";
-  private String metricLabel = "";
   private long counter = 0;
 
+  @Override
   @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedInvocationCount)")
   public void pointcut() {
   }
 
   @Around("pointcut()")
-  public Object determineMetricName(ProceedingJoinPoint joinPoint) throws Throwable {
-    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-    Method method = signature.getMethod();
-
-    InstrumentedInvocationCount ic = method.getAnnotation(InstrumentedInvocationCount.class);
-    metricName = ic.name();
-    metricDescription = ic.description();
-
+  public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    super.determineMetricInformation(joinPoint, InstrumentedInvocationCount.class);
+    
     return joinPoint.proceed();
   }
 
@@ -41,6 +30,6 @@ public class InvocationCounter {
   public void incrementCounter() {
     this.counter++;
 
-    Publisher.pushToAdapter(new CounterData(metricName, metricDescription, metricLabel, this.counter));
+    super.publish(new CounterData(this.counter));
   }
 }

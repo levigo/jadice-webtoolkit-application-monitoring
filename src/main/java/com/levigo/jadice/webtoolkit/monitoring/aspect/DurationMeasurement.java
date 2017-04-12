@@ -1,40 +1,29 @@
 package com.levigo.jadice.webtoolkit.monitoring.aspect;
 
-import java.lang.reflect.Method;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 
 import com.jadice.web.util.instrumented.metrics.InstrumentedDuration;
-import com.levigo.jadice.webtoolkit.monitoring.Publisher;
 import com.levigo.jadice.webtoolkit.monitoring.data.DurationData;
 
 @Aspect
-public class DurationMeasurement {
+public class DurationMeasurement extends BasicAspect {
 
-  private String metricName = "";
-  private String metricDescription = "";
-  private String metricLabel = "";
   private long startTime = 0;
 
+  @Override
   @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedDuration)")
   public void pointcut() {
   }
 
   @Around("pointcut()")
-  public Object determineMetricName(ProceedingJoinPoint joinPoint) throws Throwable {
-    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-    Method method = signature.getMethod();
-
-    InstrumentedDuration id = method.getAnnotation(InstrumentedDuration.class);
-    metricName = id.name();
-    metricDescription = id.description();
-
+  public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    super.determineMetricInformation(joinPoint, InstrumentedDuration.class);
+    
     return joinPoint.proceed();
   }
 
@@ -45,7 +34,6 @@ public class DurationMeasurement {
 
   @After("pointcut()")
   public void stopMeasurement() {
-    Publisher.pushToAdapter(new DurationData(metricName, metricDescription, metricLabel,
-        System.currentTimeMillis() - startTime));
+    super.publish(new DurationData(System.currentTimeMillis() - this.startTime));
   }
 }
