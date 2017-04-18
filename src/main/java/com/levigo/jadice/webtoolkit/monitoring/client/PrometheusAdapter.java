@@ -30,10 +30,6 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
   @Override
   public void publish(DataObject<?> data) {
 
-    // TODO: Remove!
-    System.out.println("PrometheusAdapter: [metric: " + data.getMetricName() + "{" + data.getMetricLabelAttr() + "=\""
-        + data.getMetricLabelValue() + "\"}, value: " + data.getValue() + "]");
-
     if (data instanceof DurationData) {
       DurationData dd = (DurationData) data;
 

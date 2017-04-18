@@ -27,7 +27,7 @@ Therefore the _SimpleConsoleAdapter_ is set as default adapter.
 
 After these steps your JWT-Application is ready to be monitored and you should see console outputs like:
 ```
-ConsoleAdapter: [metric: basic_jadice_service_get_tile_image_duration{=""}, value: 12]
+SimpleConsoleAdapter: [metric: basic_jadice_service_get_tile_image_duration{=""}, value: 12]
 ```
 
 ### Run application monitoring with Prometheus

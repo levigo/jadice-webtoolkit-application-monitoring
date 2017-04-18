@@ -1,7 +1,7 @@
 package com.levigo.jadice.webtoolkit.monitoring;
 
 import com.levigo.jadice.webtoolkit.monitoring.client.MonitorClient;
-import com.levigo.jadice.webtoolkit.monitoring.client.PrometheusAdapter;
+import com.levigo.jadice.webtoolkit.monitoring.client.SimpleConsoleAdapter;
 import com.levigo.jadice.webtoolkit.monitoring.data.DataObject;
 
 /**
@@ -11,7 +11,7 @@ import com.levigo.jadice.webtoolkit.monitoring.data.DataObject;
  */
 final public class Publisher {
 
-  private static final MonitorClient monitorClient = new PrometheusAdapter();
+  private static final MonitorClient monitorClient = new SimpleConsoleAdapter();
   private static Publisher instance;
 
   /**
