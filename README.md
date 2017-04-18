@@ -10,8 +10,9 @@ It is designed as a basic approach with adaption examples for two different moni
 Please notice that all solutions, using a third-party monitoring system, do not provide any security functionality - so every one can grab your metrics as long as you don't define any access restrictions by your own.
 
 ## License
+The JWT - Application Monitoring project is licensed under the BSD 3-Clause License. For other licensing options please [contact us].
 ## Support
-Support is available via issue tracker. Commercial support is available. For inquiries please [contact us](mailto:solutions@levigo.de).
+Support is available via issue tracker. Commercial support is available. For inquiries please [contact us].
 
 ## Usage
 ### Introduction
@@ -59,3 +60,5 @@ To define your own Adapter following the steps below:
 1. Open `src/main/java/com/levigo/jadice/webtoolkit/monitoring/client`.
 2. Create a new Java-Class and implement the interface `MonitorClient`.
 3. Open the file _Publisher.java_ in `src/main/java/com/levigo/jadice/webtoolkit/monitoring` and set your adapter (in line 14) as monitor client.
+
+[contact us]: mailto:solutions@levigo.de
