@@ -8,6 +8,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import com.jadice.web.util.instrumented.metrics.InstrumentedResult;
 import com.levigo.jadice.webtoolkit.monitoring.data.ReturnData;
 
+/**
+ * This aspect handles all methods annotated by {@link InstrumentedResult}.
+ */
 @Aspect
 public class MethodResult extends BasicAspect {
 
@@ -17,8 +20,11 @@ public class MethodResult extends BasicAspect {
   public void pointcut() {
   }
 
+  /**
+   * Determines the metric information. This method is invoked by the join point functionality.
+   */
   @Around("pointcut()")
-  public Object determineMetricName(ProceedingJoinPoint joinPoint) throws Throwable {
+  public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
     super.determineMetricInformation(joinPoint, InstrumentedResult.class);
 

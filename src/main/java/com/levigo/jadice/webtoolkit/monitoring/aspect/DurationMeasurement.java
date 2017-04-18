@@ -20,18 +20,27 @@ public class DurationMeasurement extends BasicAspect {
   public void pointcut() {
   }
 
+  /**
+   * Determines the metric information. This method is invoked by the join point functionality.
+   */
   @Around("pointcut()")
   public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
     super.determineMetricInformation(joinPoint, InstrumentedDuration.class);
-    
+
     return joinPoint.proceed();
   }
 
+  /**
+   * Starts the measurement.
+   */
   @Before("pointcut()")
   public void startMeasurement(ProceedingJoinPoint joinPoint) {
     this.startTime = System.currentTimeMillis();
   }
 
+  /**
+   * Stops the measurement.
+   */
   @After("pointcut()")
   public void stopMeasurement() {
     super.publish(new DurationData(System.currentTimeMillis() - this.startTime));

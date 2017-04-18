@@ -1,5 +1,11 @@
 package com.levigo.jadice.webtoolkit.monitoring.data;
 
+/**
+ * This class defines a data transfer object to make it easier for the adapter to decide which
+ * metric type to use.
+ *
+ * @param <T> Usually a primitive data type.
+ */
 public abstract class DataObject<T> {
 
   protected String metricName = "";

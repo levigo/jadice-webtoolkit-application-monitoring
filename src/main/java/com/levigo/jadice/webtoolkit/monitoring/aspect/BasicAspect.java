@@ -12,6 +12,13 @@ import com.jadice.web.util.instrumented.metrics.InstrumentedLabel;
 import com.levigo.jadice.webtoolkit.monitoring.Publisher;
 import com.levigo.jadice.webtoolkit.monitoring.data.DataObject;
 
+/**
+ * This class provides a basic functionality to feed a publisher with data. Therefore the method
+ * {@link #determineMetricInformation(ProceedingJoinPoint, Class)} collects all necessary
+ * information from the annotation(s). The method {@link #publish(DataObject)} sends the data to the
+ * publisher.
+ *
+ */
 @Aspect
 public abstract class BasicAspect {
 
@@ -26,7 +33,7 @@ public abstract class BasicAspect {
   public abstract void pointcut();
 
   /**
-   * This method needs to bee called to set metric name and metric description as well label
+   * This method needs to be called to set metric name and metric description as well label
    * attribute and label value for this object. The proceeding join point is given by an around
    * ({@link org.aspectj.lang.annotation.Around @Around(..)}) advice.
    * 
@@ -62,6 +69,7 @@ public abstract class BasicAspect {
 
   /**
    * Publishes the given data.
+   * 
    * @param data The data object.
    */
   protected void publish(DataObject<?> data) {
