@@ -30,7 +30,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- This is ONLY required for the Prometheus adaption -->
+		<!-- This is ONLY required for Prometheus adaption -->
 		<!-- The client -->
 		<dependency>
 			<groupId>io.prometheus</groupId>
@@ -62,6 +62,13 @@
 			<version>3.0.1</version>
 		</dependency>
 
+		<!-- This is ONLY required for Riemann adaption -->
+		<dependency>
+			<groupId>io.riemann</groupId>
+			<artifactId>riemann-java-client</artifactId>
+			<version>0.4.3</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
