@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
-import com.jadice.web.util.instrumented.metrics.InstrumentedDuration;
+import com.jadice.web.util.instrumented.InstrumentedDuration;
 import com.levigo.jadice.webtoolkit.monitoring.data.DurationData;
 
 @Aspect
@@ -16,7 +16,7 @@ public class DurationMeasurement extends BasicAspect {
   private long startTime = 0;
 
   @Override
-  @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedDuration)")
+  @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.InstrumentedDuration)")
   public void pointcut() {
   }
 

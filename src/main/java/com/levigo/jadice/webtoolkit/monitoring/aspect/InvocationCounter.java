@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import com.jadice.web.util.instrumented.metrics.InstrumentedInvocationCount;
+import com.jadice.web.util.instrumented.InstrumentedInvocationCount;
 import com.levigo.jadice.webtoolkit.monitoring.data.CounterData;
 
 /**
@@ -18,7 +18,7 @@ public class InvocationCounter extends BasicAspect {
   private long counter = 0;
 
   @Override
-  @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedInvocationCount)")
+  @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.InstrumentedInvocationCount)")
   public void pointcut() {
   }
 

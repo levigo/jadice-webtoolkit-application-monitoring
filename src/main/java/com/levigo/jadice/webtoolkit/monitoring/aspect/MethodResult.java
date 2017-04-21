@@ -5,7 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import com.jadice.web.util.instrumented.metrics.InstrumentedResult;
+import com.jadice.web.util.instrumented.InstrumentedResult;
 import com.levigo.jadice.webtoolkit.monitoring.data.ReturnData;
 
 /**
@@ -16,7 +16,7 @@ public class MethodResult extends BasicAspect {
 
 
   @Override
-  @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.metrics.InstrumentedResult)")
+  @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.InstrumentedResult)")
   public void pointcut() {
   }
 
