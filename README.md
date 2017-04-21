@@ -30,14 +30,14 @@ Therefore the _SimpleConsoleAdapter_ is set as default adapter.
 4. Open the _pom.xml_ of **your** JWT-Project and add this project as provided dependency (make sure you then add the compiled version to your project):
 	```xml
 	<dependencies>
-		...
-		<dependency>
-			<groupId>com.levigo.jadice.webtoolkit</groupId>
-			<artifactId>webtoolkit-application-monitoring</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		...
+	  ...
+	  <dependency>
+	    <groupId>com.levigo.jadice.webtoolkit</groupId>
+	    <artifactId>webtoolkit-application-monitoring</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+	    <scope>provided</scope>
+	  </dependency>
+	  ...
 	</dependencies>
 	```
 5. Open **your** JWT-Project and add the aop.xml to `src/main/resources/META-INF`.
@@ -59,11 +59,11 @@ If you already followed the steps described in [Getting started] you just contin
 3. Add PrometheusAdapter as listener to your _web.xml_ (in `src/main/webapp/WEB-INF/`):
 	```xml
 	<web-app ...>
-		...
-		<listener>
-			<listener-class>com.levigo.jadice.webtoolkit.monitoring.client.PrometheusAdapter</listener-class>
-		</listener>
-		...
+	  ...
+	  <listener>
+	    <listener-class>com.levigo.jadice.webtoolkit.monitoring.client.PrometheusAdapter</listener-class>
+	  </listener>
+	  ...
 	</web-app>
 	```
 4. Start Prometheus and make it collect metric data from your host (eg. http://127.0.0.1/metrics).
