@@ -9,5 +9,8 @@
 		<aspect	name="com.levigo.jadice.webtoolkit.monitoring.aspect.DurationMeasurement" />
 		<aspect	name="com.levigo.jadice.webtoolkit.monitoring.aspect.InvocationCounter" />
 		<aspect name="com.levigo.jadice.webtoolkit.monitoring.aspect.MethodResult" />
+		
+		<!-- declare extended aspect example to the weaver -->
+		<aspect name="com.levigo.jadice.webtoolkit.monitoring.extended_examples.CustomDynamicLabelExample"/>
 	</aspects>
 </aspectj>

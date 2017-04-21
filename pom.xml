@@ -25,10 +25,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.levigo.jadice.webtoolkit</groupId>
+			<artifactId>webtoolkit-demo-common</artifactId>
+			<version>${jwt.version}</version>
+		</dependency>
+		
+		<!-- This is ONLY required for the extended examples -->
+		<dependency>
+			<groupId>com.levigo.jadice.webtoolkit</groupId>
 			<artifactId>webtoolkit-util-instrumented</artifactId>
 			<version>${jwt.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>		
 
 		<!-- This is ONLY required for Prometheus adaption -->
 		<!-- The client -->

@@ -34,7 +34,7 @@ public class DurationMeasurement extends BasicAspect {
    * Starts the measurement.
    */
   @Before("pointcut()")
-  public void startMeasurement(ProceedingJoinPoint joinPoint) {
+  public void startMeasurement() {
     this.startTime = System.currentTimeMillis();
   }
 
