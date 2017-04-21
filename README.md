@@ -1,9 +1,9 @@
 # jadice web toolkit - Application Monitoring
-The jadice web toolkit (JWT) - Application Monitoring project is an aspect oriented way using load time weaving to monitor server side functionality of the JWT.
+The _jadice web toolkit (JWT) - Application Monitoring_ project is an aspect oriented way using load time weaving to monitor server side functionality of the JWT.
 It is designed as a basic approach with adaption examples for two different monitoring systems [Prometheus] and [Riemann], you can use for your own integration.
 
 ## Features
-- aspect orientated
+- aspect oriented
 - annotation based
 - two integrated monitor clients as a working example
 
@@ -75,7 +75,7 @@ Then, to define your own Adapter following the steps below:
 2. Create a new Java-Class and implement the interface `MonitorClient`.
 3. Open the file _Publisher.java_ in `src/main/java/com/levigo/jadice/webtoolkit/monitoring` and set your adapter (at line 14) as monitor client.
 4. Remove not needed dependencies in _pom.xml_.
-4. Compile the project.
+5. Compile the project.
 
 [Prometheus]: https://prometheus.io
 [Riemann]: http://riemann.io
