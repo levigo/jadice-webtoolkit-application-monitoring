@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
 import com.jadice.web.util.instrumented.InstrumentedLabel;
+import com.jadice.web.util.instrumented.InstrumentedLabels;
 import com.levigo.jadice.webtoolkit.monitoring.Publisher;
 import com.levigo.jadice.webtoolkit.monitoring.data.DataObject;
 
@@ -22,11 +23,6 @@ import com.levigo.jadice.webtoolkit.monitoring.data.DataObject;
 @Aspect
 public abstract class BasicAspect {
 
-  protected String metricName = "";
-  protected String metricDescription = "";
-  protected String metricLabelAttr = "";
-  protected String metricLabelValue = "";
-
   private Publisher publisher = Publisher.getInstance();
 
   @Pointcut
@@ -39,15 +35,16 @@ public abstract class BasicAspect {
    * 
    * @param joinPoint The {@link ProceedingJoinPoint} of an around advice.
    */
-  protected void determineMetricInformation(ProceedingJoinPoint joinPoint, Class<? extends Annotation> clazz) {
-    Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+  protected void determineMetricInformation(DataObject<?> data, ProceedingJoinPoint joinPoint,
+      Class<? extends Annotation> clazz) {
 
+    Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
     Annotation annotation = method.getAnnotation(clazz);
 
     // Get the metric name
     try {
       Method name = annotation.getClass().getMethod("name");
-      this.metricName = (String) name.invoke(annotation);
+      data.setMetricName((String) name.invoke(annotation));
     } catch (Exception e) {
       System.err.println(e.getLocalizedMessage());
     }
@@ -55,15 +52,21 @@ public abstract class BasicAspect {
     // Get the metric description
     try {
       Method description = annotation.getClass().getMethod("description");
-      this.metricDescription = (String) description.invoke(annotation);
+      data.setMetricDescription((String) description.invoke(annotation));
     } catch (Exception e) {
       System.err.println(e.getLocalizedMessage());
     }
 
+    InstrumentedLabels ils = method.getAnnotation(InstrumentedLabels.class);
+    if (null != ils) {
+      for (InstrumentedLabel label : ils.value()) {
+        data.getLabels().put(label.attr(), label.value());
+      }
+    }
+
     InstrumentedLabel il = method.getAnnotation(InstrumentedLabel.class);
     if (null != il) {
-      this.metricLabelAttr = il.attr();
-      this.metricLabelValue = il.value();
+      data.getLabels().put(il.attr(), il.value());
     }
   }
 
@@ -73,13 +76,6 @@ public abstract class BasicAspect {
    * @param data The data object.
    */
   protected void publish(DataObject<?> data) {
-
-    data.setMetricName(this.metricName);
-    data.setMetricDescription(this.metricDescription);
-    data.setMetriclabelAttr(this.metricLabelAttr);
-    data.setMetriclabelValue(this.metricLabelValue);
-
     this.publisher.pushToAdapter(data);
   }
-
 }

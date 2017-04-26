@@ -1,5 +1,8 @@
 package com.levigo.jadice.webtoolkit.monitoring.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class defines a data transfer object to make it easier for the adapter to decide which
  * metric type to use.
@@ -10,8 +13,7 @@ public abstract class DataObject<T> {
 
   protected String metricName = "";
   protected String metricDescription = "";
-  protected String metricLabelAttr = "";
-  protected String metricLabelValue = "";
+  protected Map<String, String> labels = new HashMap<>();
   protected T value;
 
   public DataObject(T value) {
@@ -34,22 +36,6 @@ public abstract class DataObject<T> {
     this.metricDescription = metricDescription;
   }
 
-  public String getMetricLabelAttr() {
-    return metricLabelAttr;
-  }
-
-  public void setMetriclabelAttr(String metriclabelAttr) {
-    this.metricLabelAttr = metriclabelAttr;
-  }
-
-  public String getMetricLabelValue() {
-    return metricLabelValue;
-  }
-
-  public void setMetriclabelValue(String metriclabelValue) {
-    this.metricLabelValue = metriclabelValue;
-  }
-
   public T getValue() {
     return value;
   }
@@ -58,7 +44,11 @@ public abstract class DataObject<T> {
     this.value = value;
   }
 
+  public Map<String, String> getLabels() {
+    return this.labels;
+  }
+
   public boolean hasMetricLabel() {
-    return this.metricLabelAttr.length() > 0 && this.metricLabelValue.length() > 0;
+    return !labels.isEmpty();
   }
 }

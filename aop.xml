@@ -11,6 +11,6 @@
 		<aspect name="com.levigo.jadice.webtoolkit.monitoring.aspect.MethodResult" />
 		
 		<!-- declare extended aspect example to the weaver -->
-		<aspect name="com.levigo.jadice.webtoolkit.monitoring.extended_examples.CustomDynamicLabelExample"/>
+		<aspect name="com.levigo.jadice.webtoolkit.monitoring.extended_examples.DynamicLabelExample"/>
 	</aspects>
 </aspectj>

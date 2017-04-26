@@ -1,7 +1,6 @@
 package com.levigo.jadice.webtoolkit.monitoring.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -9,13 +8,15 @@ import org.aspectj.lang.annotation.Pointcut;
 import com.jadice.web.util.instrumented.InstrumentedInvocationCount;
 import com.levigo.jadice.webtoolkit.monitoring.data.CounterData;
 
+import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicLong;
+
 /**
  * This aspect handles all methods annotated by {@link InstrumentedInvocationCount}.
  */
 @Aspect
 public class InvocationCounter extends BasicAspect {
 
-  private long counter = 0;
+  private AtomicLong counter = new AtomicLong();
 
   @Override
   @Pointcut("execution(* *(..)) && @annotation(com.jadice.web.util.instrumented.InstrumentedInvocationCount)")
@@ -27,18 +28,12 @@ public class InvocationCounter extends BasicAspect {
    */
   @Around("pointcut()")
   public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-    super.determineMetricInformation(joinPoint, InstrumentedInvocationCount.class);
+    
+    CounterData counterData = new CounterData(counter.incrementAndGet());
+    
+    super.determineMetricInformation(counterData, joinPoint, InstrumentedInvocationCount.class);
+    super.publish(counterData);
 
     return joinPoint.proceed();
-  }
-
-  /**
-   * Increments the counter and publishes the value.
-   */
-  @After("pointcut()")
-  public void incrementCounter() {
-    this.counter++;
-
-    super.publish(new CounterData(this.counter));
   }
 }

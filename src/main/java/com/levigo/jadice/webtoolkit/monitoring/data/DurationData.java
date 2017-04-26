@@ -6,4 +6,13 @@ public class DurationData extends DataObject<Long> {
     super(value);
   }
 
+  public DurationData() {
+    super(System.currentTimeMillis());
+  }
+
+  public DataObject<?> end() {
+    value = System.currentTimeMillis() - value; 
+    return this;
+  }
+
 }

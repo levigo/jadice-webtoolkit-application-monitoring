@@ -23,11 +23,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.levigo.jadice.webtoolkit</groupId>
-			<artifactId>webtoolkit-demo-common</artifactId>
-			<version>${jwt.version}</version>
-		</dependency>
 		
 		<!-- This is ONLY required for the extended examples -->
 		<dependency>

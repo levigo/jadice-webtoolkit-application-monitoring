@@ -1,6 +1,7 @@
 package com.levigo.jadice.webtoolkit.monitoring.client;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.levigo.jadice.webtoolkit.monitoring.data.CounterData;
@@ -26,22 +27,34 @@ public class RiemannAdapter implements MonitorClient {
   @Override
   public void publish(DataObject<?> data) {
 
-    String tags = data.hasMetricLabel() ? data.getMetricLabelAttr() + "=\"" + data.getMetricLabelValue() + "\"" : "";
+    String[] tags = getTags(data.getLabels());
 
     if (data instanceof CounterData) {
-      CounterData counterData = (CounterData) data; 
-      fireRiemannEvent(counterData.getMetricName(), "", counterData.getValue(), tags);
-      
+      CounterData counterData = (CounterData) data;
+      fireRiemannEvent(counterData.getMetricName(), "", counterData.getValue(), tags.toString());
+
     } else if (data instanceof DurationData) {
       DurationData durationData = (DurationData) data;
-      fireRiemannEvent(durationData.getMetricName(), "", durationData.getValue(), tags);
+      fireRiemannEvent(durationData.getMetricName(), "", durationData.getValue(), tags.toString());
 
     } else if (data instanceof ReturnData) {
       ReturnData returnData = (ReturnData) data;
-      fireRiemannEvent(returnData.getMetricName(), returnData.getValue().toString(), 0, tags);
+      fireRiemannEvent(returnData.getMetricName(), returnData.getValue().toString(), 0, tags.toString());
     }
   }
-  
+
+  private String[] getTags(Map<String, String> labelMap) {
+
+    String[] tags = new String[labelMap.size()];
+    int i = 0;
+
+    for (Map.Entry<String, String> item : labelMap.entrySet()) {
+      tags[i++] = item.getKey() + ":" + item.getValue();
+    }
+
+    return tags;
+  }
+
   private void fireRiemannEvent(String service, String state, double metric, String... tags) {
     try {
       riemannClient.event() //

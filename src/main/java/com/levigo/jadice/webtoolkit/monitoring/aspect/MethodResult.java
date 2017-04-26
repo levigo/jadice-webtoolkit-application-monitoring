@@ -26,11 +26,11 @@ public class MethodResult extends BasicAspect {
   @Around("pointcut()")
   public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
-    super.determineMetricInformation(joinPoint, InstrumentedResult.class);
-
     Object methodResult = joinPoint.proceed();
+    ReturnData data = new ReturnData(methodResult);
 
-    super.publish(new ReturnData(methodResult));
+    super.determineMetricInformation(data, joinPoint, InstrumentedResult.class);
+    super.publish(data);
 
     return methodResult;
   }

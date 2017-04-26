@@ -1,5 +1,6 @@
 package com.levigo.jadice.webtoolkit.monitoring.client;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,6 +31,8 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
   @Override
   public void publish(DataObject<?> data) {
 
+    String[] labelValues = mapToArray(data.getLabels().values());
+
     if (data instanceof DurationData) {
       DurationData dd = (DurationData) data;
 
@@ -38,7 +41,7 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
 
       if (dd.hasMetricLabel()) {
         // gauge.labels(dd.getMetricLabelValue()).set(dd.getValue());
-        hist.labels(dd.getMetricLabelValue()).observe(dd.getValue());
+        hist.labels(labelValues).observe(dd.getValue());
       } else {
         // gauge.set((dd.getValue()));
         hist.observe(dd.getValue());
@@ -51,7 +54,7 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
       counter.clear();
 
       if (cd.hasMetricLabel()) {
-        counter.labels(cd.getMetricLabelValue()).inc(cd.getValue());
+        counter.labels(labelValues).inc(cd.getValue());
       } else {
         counter.inc(cd.getValue());
       }
@@ -75,14 +78,20 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
     // nothing to do here
   }
 
+  private String[] mapToArray(Collection<String> collection) {
+    return collection.toArray(new String[collection.size()]);
+  }
+
   private <C extends SimpleCollector<?>, B extends SimpleCollector.Builder<B, C>> C getCollector(
       SimpleCollector.Builder<B, C> builder, DataObject<?> data) {
     @SuppressWarnings("unchecked")
     C collector = (C) collectors.get(data.getMetricName());
+    String[] labelAttributes = mapToArray(data.getLabels().keySet());
+
     if (null == collector) {
       if (data.hasMetricLabel()) {
         collector = builder.name(data.getMetricName()).help(data.getMetricDescription()).labelNames(
-            data.getMetricLabelAttr()).register();
+            labelAttributes).register();
       } else {
         collector = builder.name(data.getMetricName()).help(data.getMetricDescription()).register();
       }

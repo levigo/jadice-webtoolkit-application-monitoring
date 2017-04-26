@@ -39,5 +39,4 @@ final public class Publisher {
   public void pushToAdapter(DataObject<?> data) {
     monitorClient.publish(data);
   }
-
 }
