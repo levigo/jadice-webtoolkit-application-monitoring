@@ -26,8 +26,9 @@ To make the getting started example as simple as possible the metrics will be di
 Therefore the _SimpleConsoleAdapter_ is set as default adapter.
 1. Download this project and import it as existing Maven project.
 2. Download _AspectJ Weaver_ from <https://mvnrepository.com/artifact/org.aspectj/aspectjweaver/1.8.10> or use it as a Maven dependency (doesn't matter in which project - you will need that for step no. 6).
-3. Go to _pom.xml_ and replace the JWT-version under `<properties>` if it's necessary.
-4. Open the _pom.xml_ of **your** JWT-Project and add this project as provided dependency (make sure you then add the compiled version to your project):
+3. Compile the project.
+4. Go to _pom.xml_ and replace the JWT-version under `<properties>` if it's necessary.
+5. Open the _pom.xml_ of **your** JWT-Project and add this project as provided dependency (make sure you then add the compiled version to your project):
 	```xml
 	<dependencies>
 	  ...
@@ -40,8 +41,8 @@ Therefore the _SimpleConsoleAdapter_ is set as default adapter.
 	  ...
 	</dependencies>
 	```
-5. Open **your** JWT-Project and add the aop.xml to `src/main/resources/META-INF`.
-6. Edit the _Run Configurations_ of **your** JWT-Project and set the following _VM argument_:
+6. Open **your** JWT-Project and add _aop.xml_ to `src/main/resources/META-INF`.
+7. Edit the _Run Configurations_ of **your** JWT-Project and set the following _VM argument_:
 	```
 	-javaagent:<PATH-TO-WEAVER>/aspectjweaver-1.8.10.jar
 	```
@@ -66,6 +67,7 @@ If you already followed the steps described in [Getting started] you just contin
 	  ...
 	</web-app>
 	```
+	If your runtime environment supports annotations you also can annotate `PrometheusAdapter` with `@WebListener` instead of modifying your _web.xml_.
 4. Start Prometheus and make it collect metric data from your host (eg. http://127.0.0.1/metrics).
 
 ### Define your own adapter
@@ -76,6 +78,26 @@ Then, to define your own Adapter following the steps below:
 3. Open the file _Publisher.java_ in `src/main/java/com/levigo/jadice/webtoolkit/monitoring` and set your adapter (at line 14) as monitor client.
 4. Remove not needed dependencies in _pom.xml_.
 5. Compile the project.
+
+## Extended Examples
+All the extended examples are located in `src/main/java/com/levigo/jadice/webtoolkit/monitoring/extended_examples`. For now there is one extended example available. There will be more in future.
+
+### Dynamic Label
+The _Dynamic Label Example_ is based on the idea static labels (`@InstrumentedLabel`) are not sufficient for your use case.
+This example has a specific pointcut. It gets active when the method `read(..)` of interface `com.levigo.jadice.web.server.DocumentDataProvider` is executed.
+Metric name, description and label attribute name are fix and must be set before compilation of `DynamicLabelExample`.
+Label value is determined during runtime. It represents the class name of the currently executing object.
+
+To see the example in action first follow the [Getting started] guide and then the steps below:
+1. Open aop.xml you've copied into **your** project before.
+2. Toggle comment on line including _CustomDynamicLabelExample_.
+3. Compile the project.
+
+After the steps above your JWT-Application should produce outputs like:
+```
+SimpleConsoleAdapter: [metric: dynamic_labels_example_duration{provider="SimpleDocumentProvider"}, value: 38]
+```
+
 
 [Prometheus]: https://prometheus.io
 [Riemann]: http://riemann.io
