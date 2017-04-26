@@ -1,10 +1,8 @@
 package com.levigo.jadice.webtoolkit.monitoring.extended_examples;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
 import com.levigo.jadice.webtoolkit.monitoring.aspect.BasicAspect;
@@ -15,9 +13,7 @@ import com.levigo.jadice.webtoolkit.monitoring.data.DurationData;
  * {@link com.jadice.web.util.instrumented.InstrumentedLabel @InstrumentedLabel} instead.
  */
 @Aspect
-public class CustomDynamicLabelExample extends BasicAspect {
-
-  private long startTime = 0;
+public class DynamicLabelExample extends BasicAspect {
 
   @Override
   @Pointcut("execution(* com.levigo.jadice.web.server.DocumentDataProvider.read(..))")
@@ -30,29 +26,18 @@ public class CustomDynamicLabelExample extends BasicAspect {
   @Around("pointcut()")
   public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
+    DurationData measurement = new DurationData();
+
     final Class<?> clazz = joinPoint.getThis().getClass();
 
-    this.metricName = "class_path_document_provider_dynamic_labels_duration";
-    this.metricDescription = "Custom description.";
-    this.metricLabelAttr = "provider";
-    this.metricLabelValue = clazz.getSimpleName();
+    measurement.setMetricName("dynamic_labels_example_duration");
+    measurement.setMetricDescription("Time in milliseconds the data provider needs to read.");
+    measurement.getLabels().put("provider", clazz.getSimpleName());
 
-    return joinPoint.proceed();
-  }
-
-  /**
-   * Starts the measurement.
-   */
-  @Before("pointcut()")
-  public void startMeasurement() {
-    this.startTime = System.currentTimeMillis();
-  }
-
-  /**
-   * Stops the measurement.
-   */
-  @After("pointcut()")
-  public void stopMeasurement() {
-    this.publish(new DurationData(System.currentTimeMillis() - this.startTime));
+    try {
+      return joinPoint.proceed();
+    } finally {
+      this.publish(measurement.end());
+    }
   }
 }
