@@ -1,6 +1,6 @@
 # jadice web toolkit - Application Monitoring
 The _jadice web toolkit (JWT) - Application Monitoring_ project is an aspect oriented way using load time weaving to monitor server side functionality of the JWT.
-It is designed as a basic approach with adaption examples for two different monitoring systems [Prometheus] and [Riemann], you can use for your own integration.
+It is designed as a basic approach with adaption examples for two different monitoring systems, [Prometheus] and [Riemann]. Both you can use for your own integration.
 
 ## Features
 - aspect oriented
@@ -54,7 +54,7 @@ SimpleConsoleAdapter: [metric: basic_jadice_service_get_tile_image_duration{=""}
 
 ### Run application monitoring with Prometheus
 This guide leads you through the integration process for the provided Prometheus adaption example.
-If you already followed the steps described in [Getting started] you just continue like below:
+If you already followed the steps described in [Getting started], you just can continue like below:
 1. Open the file _Publisher.java_ in `src/main/java/com/levigo/jadice/webtoolkit/monitoring` and set `new PrometheusAdapter()` (at line 14) as monitor client.
 2. Compile the project.
 3. Add PrometheusAdapter as listener to your _web.xml_ (in `src/main/webapp/WEB-INF/`):
@@ -80,17 +80,17 @@ Then, to define your own Adapter following the steps below:
 5. Compile the project.
 
 ## Extended Examples
-All the extended examples are located in `src/main/java/com/levigo/jadice/webtoolkit/monitoring/extended_examples`. For now there is one extended example available. There will be more in future.
+All the extended examples are located in `src/main/java/com/levigo/jadice/webtoolkit/monitoring/extended_examples`. For now there is one more extended example available. There will be more in future.
 
 ### Dynamic Label
-The _Dynamic Label Example_ is based on the idea static labels (`@InstrumentedLabel`) are not sufficient for your use case.
-This example has a specific pointcut. It gets active when the method `read(..)` of interface `com.levigo.jadice.web.server.DocumentDataProvider` is executed.
-Metric name, description and label attribute name are fix and must be set before compilation of `DynamicLabelExample`.
-Label value is determined during runtime. It represents the class name of the currently executing object.
+The _Dynamic Label Example_ is based on the idea that static labels (`@InstrumentedLabel`) are not sufficient for your use case.
+This example has a specific pointcut. It becomes active when the method `read(..)` of the interface `com.levigo.jadice.web.server.DocumentDataProvider` is executed.
+The Metric name, description and label attribute name are fix and must be set before `DynamicLabelExample` is compiled.
+The Label value is determined during runtime. It represents the class name of the currently executing object.
 
-To see the example in action first follow the [Getting started] guide and then the steps below:
+To see the example in action first follow the [Getting started] guide, and then the steps below:
 1. Open aop.xml you've copied into **your** project before.
-2. Toggle comment on line including _CustomDynamicLabelExample_.
+2. Toggle the comment on line including _CustomDynamicLabelExample_.
 3. Compile the project.
 
 After the steps above your JWT-Application should produce outputs like:
