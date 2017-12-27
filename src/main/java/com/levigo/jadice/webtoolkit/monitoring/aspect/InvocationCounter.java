@@ -1,5 +1,7 @@
 package com.levigo.jadice.webtoolkit.monitoring.aspect;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -7,8 +9,6 @@ import org.aspectj.lang.annotation.Pointcut;
 
 import com.jadice.web.util.instrumented.InstrumentedInvocationCount;
 import com.levigo.jadice.webtoolkit.monitoring.data.CounterData;
-
-import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This aspect handles all methods annotated by {@link InstrumentedInvocationCount}.
