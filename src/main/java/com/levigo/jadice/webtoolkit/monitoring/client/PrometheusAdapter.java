@@ -20,6 +20,7 @@ import io.prometheus.client.Counter;
 import io.prometheus.client.Histogram;
 import io.prometheus.client.SimpleCollector;
 import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.hotspot.DefaultExports;
 
 public class PrometheusAdapter implements MonitorClient, ServletContextListener {
 
@@ -69,6 +70,7 @@ public class PrometheusAdapter implements MonitorClient, ServletContextListener 
   public void contextInitialized(ServletContextEvent sce) {
     ServletContext context = sce.getServletContext();
 
+    DefaultExports.initialize();
     ServletRegistration.Dynamic dynamic = context.addServlet("MetricsServlet", new MetricsServlet(collectorRegistry));
     dynamic.addMapping(contextPath);
   }
