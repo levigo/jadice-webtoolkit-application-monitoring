@@ -31,15 +31,15 @@ public class RiemannAdapter implements MonitorClient {
 
     if (data instanceof CounterData) {
       CounterData counterData = (CounterData) data;
-      fireRiemannEvent(counterData.getMetricName(), "", counterData.getValue(), tags.toString());
+      fireRiemannEvent(counterData.getMetricName(), "", counterData.getValue(), tags);
 
     } else if (data instanceof DurationData) {
       DurationData durationData = (DurationData) data;
-      fireRiemannEvent(durationData.getMetricName(), "", durationData.getValue(), tags.toString());
+      fireRiemannEvent(durationData.getMetricName(), "", durationData.getValue(), tags);
 
     } else if (data instanceof ReturnData) {
       ReturnData returnData = (ReturnData) data;
-      fireRiemannEvent(returnData.getMetricName(), returnData.getValue().toString(), 0, tags.toString());
+      fireRiemannEvent(returnData.getMetricName(), returnData.getValue().toString(), 0, tags);
     }
   }
 
